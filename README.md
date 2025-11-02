@@ -1,7 +1,7 @@
 # 🧠 Kimia Farma Business Performance Analysis
 ### *Big Data Analytics Project — Rakamin Academy x Kimia Farma*
 
-![Kimia Farma Banner](h[ttps://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea/page/tWc6D](https://github.com/Rakafebrian/VIX-BigData-Analytics-Kimia-Farma-x-Rakamin/blob/main/Asset/LOGO-KIMIA-FARMA.png))
+![Kimia Farma Banner](https://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea/page/tWc6D)
 
 ---
 
@@ -24,96 +24,113 @@ Through this analysis, I explored sales trends, branch performance, product cont
 
 ---
 
-## 🏢 About the Company
+## 🧮 SQL Data Modeling  
 
-**Kimia Farma** is Indonesia’s first pharmaceutical company, established in 1817 under the name *NV Chemicalien Handle Rathkamp & Co*.  
-After Indonesia’s independence, the government merged several pharmaceutical companies into **PNF Bhinneka Kimia Farma** (1958), and later in 1971, it became **PT Kimia Farma (Persero) Tbk**.  
+To create the main analysis table, the following SQL query was used:
 
-The company continues to play a vital role in the Indonesian healthcare and pharmaceutical industry.
+```sql
+CREATE OR REPLACE TABLE `kimia_farma.analysis` AS
+SELECT
+    t.transaction_id,
+    t.date,
+    t.branch_id,
+    kc.branch_name,
+    kc.kota,
+    kc.provinsi,
+    kc.rating AS rating_cabang,
+    t.customer_name,
+    t.product_id,
+    p.product_name,
+    p.product_category,
+    p.price AS actual_price,
+    t.discount_percentage,
+    i.opname_stock,
+    CASE
+        WHEN p.price <= 50000 THEN '≤ 50K'
+        WHEN p.price > 50000 AND p.price <= 100000 THEN '50K - 100K'
+        WHEN p.price > 100000 AND p.price <= 300000 THEN '100K - 300K'
+        WHEN p.price > 300000 AND p.price <= 500000 THEN '300K - 500K'
+        WHEN p.price > 500000 THEN '> 500K'
+    END AS price_range,
+    CASE
+        WHEN t.price <= 50000 THEN 0.10
+        WHEN t.price > 50000 AND t.price <= 100000 THEN 0.15
+        WHEN t.price > 100000 AND t.price <= 300000 THEN 0.20
+        WHEN t.price > 300000 AND t.price <= 500000 THEN 0.25
+        WHEN t.price > 500000 THEN 0.30
+    END AS persentase_gross_laba,
+    (t.price * (1 - t.discount_percentage)) AS nett_sales,
+    (t.price * (1 - t.discount_percentage)) *
+        CASE
+            WHEN t.price <= 50000 THEN 0.10
+            WHEN t.price > 50000 AND t.price <= 100000 THEN 0.15
+            WHEN t.price > 100000 AND t.price <= 300000 THEN 0.20
+            WHEN t.price > 300000 AND t.price <= 500000 THEN 0.25
+            WHEN t.price > 500000 THEN 0.30
+        END AS nett_profit,
+    t.rating AS rating_transaksi
+FROM
+    `kimia_farma.kf_final_transaction` t
+LEFT JOIN
+    `kimia_farma.kf_kantor_cabang` kc ON t.branch_id = kc.branch_id
+LEFT JOIN
+    `kimia_farma.kf_product` p ON t.product_id = p.product_id
+LEFT JOIN
+    `kimia_farma.kf_inventory` i 
+    ON t.branch_id = i.branch_id AND t.product_id = i.product_id;
+```
 
----
-
-## 🎯 Objectives
-
-1. Evaluate Kimia Farma’s **sales performance** from 2020–2023.  
-2. Identify **trends, patterns, and insights** in business operations.  
-3. Build a **BigQuery-based analysis table** by combining multiple datasets.  
-4. Visualize business metrics through a **Looker Studio Performance Dashboard**.  
-
----
-
-## 🚀 Missions
-
-| Mission | Description |
-|----------|--------------|
-| **Mission 1** | Import dataset into **Google BigQuery** |
-| **Mission 2** | Build an integrated **analysis table** using SQL JOIN |
-| **Mission 3** | Create **Performance Dashboard** in **Looker Studio** |
-
----
-
-## 🧱 Dataset Preparation
-
-Steps to prepare and load the dataset:  
-1. Create a GCP project: `Rakamin_KF_Analytics`  
-2. Open **BigQuery Console**  
-3. Create a dataset: `kimia_farma`  
-4. Import all CSV data files  
-5. Verify import results and perform validation  
-
----
-
-## 🧮 SQL Data Modeling
-
-An **analysis table** was created by joining four core tables:  
-- `kf_final_transaction`  
-- `kf_kantor_cabang`  
-- `kf_product`  
-- `kf_inventory`  
-
-The query combines transactional, product, branch, and inventory data — forming a unified dataset ready for analysis.
-
-### Key Transformations:
-- Categorizing product prices into ranges  
-- Calculating gross profit percentage  
-- Computing net sales (after discount)  
-- Deriving net profit (based on profit percentage)  
-
-**Type of Join:** LEFT JOIN — ensuring all transaction data remains intact even if related data is missing.
+### 🧩 Explanation
+- **CREATE OR REPLACE TABLE**: Recreates the `analysis` table in the `kimia_farma` dataset.  
+- **LEFT JOIN**: Combines four main tables (`kf_final_transaction`, `kf_kantor_cabang`, `kf_product`, `kf_inventory`) so that all transactions are retained even if related data is missing.  
+- **CASE WHEN**:  
+  - Categorizes product prices into ranges (*price_range*).  
+  - Calculates *gross profit percentage* according to price levels.  
+- **Nett Sales** = `price * (1 - discount_percentage)`  
+- **Nett Profit** = *nett_sales × gross profit percentage*  
+- **Result**: A unified dataset with branch, product, and transactional details enriched with computed business metrics.  
 
 ---
 
 ## 🔍 Exploratory Data Analysis (EDA)
 
-EDA was conducted using SQL queries to summarize sales performance per branch.
+After building the analysis table, EDA was performed to summarize branch-level performance:
 
-**Metrics Calculated:**
-- Total transactions  
-- Sales period  
-- Average price, discount, and profit %  
-- Total net sales & total profit  
-- Average rating (transaction & branch)  
-- Unique customers per branch  
+```sql
+SELECT
+    COUNT(*) AS total_transactions,
+    MIN(date) AS earliest_date,
+    MAX(date) AS latest_date,
+    AVG(actual_price) AS average_price,
+    AVG(discount_percentage) AS average_discount_percentage,
+    AVG(persentase_gross_laba) AS average_gross_profit_percentage,
+    SUM(nett_sales) AS total_net_sales,
+    SUM(nett_profit) AS total_net_profit,
+    AVG(rating_transaksi) AS average_transaction_rating,
+    AVG(rating_cabang) AS average_branch_rating,
+    branch_name,
+    COUNT(DISTINCT customer_name) AS total_customers
+FROM
+    `kimia_farma.analysis`
+GROUP BY
+    branch_name
+ORDER BY
+    total_net_sales DESC;
+```
+
+### 🧩 Explanation
+- **COUNT(*)**: Counts total transactions per branch.  
+- **MIN() / MAX()**: Defines the transaction time range.  
+- **AVG()**: Calculates averages for price, discount, profit %, and ratings.  
+- **SUM()**: Aggregates total sales and profit per branch.  
+- **COUNT(DISTINCT)**: Measures unique customer count.  
+- **ORDER BY total_net_sales DESC**: Ranks branches by sales performance.  
+
+💡 This EDA provides a clear overview of branch performance, product pricing, profit margin, and customer behavior across all regions.
 
 ---
 
-### 📊 EDA Key Findings
-
-| Analysis Aspect | Findings | Insight / Implication |
-|-----------------|-----------|------------------------|
-| **Total Transactions** | 890K–916K per branch | Balanced customer distribution |
-| **Average Product Price** | Rp 516K | Mid-to-high product category |
-| **Average Discount** | 7.5% | Effective, non-aggressive promo |
-| **Gross Profit %** | 25.6% | Stable and efficient pricing |
-| **Revenue per Branch** | Rp 425–438B | Consistent sales performance |
-| **Total Profit** | Rp 107–110B | Efficient cost control |
-| **Avg. Transaction Rating** | 4.2 / 5 | Positive customer satisfaction |
-| **Avg. Branch Rating** | 4.4 / 5 | Trusted and consistent service |
-| **Unique Customers** | 17K–18.5K | Loyal customer base |
-
----
-
-## 📈 Dashboard Visualization
+## 📈 Dashboard Visualization  
 
 An interactive **Performance Analytics Dashboard** was built using **Looker Studio**.  
 
@@ -127,7 +144,7 @@ An interactive **Performance Analytics Dashboard** was built using **Looker Stud
 
 ---
 
-## 💡 Summary Insights
+## 💡 Summary Insights  
 
 | Aspect | Key Findings |
 |---------|---------------|
@@ -139,7 +156,7 @@ An interactive **Performance Analytics Dashboard** was built using **Looker Stud
 
 ---
 
-## 🛠️ Tools & Technologies
+## 🛠️ Tools & Technologies  
 
 | Category | Tools |
 |-----------|-------|
@@ -151,32 +168,7 @@ An interactive **Performance Analytics Dashboard** was built using **Looker Stud
 
 ---
 
-## 🧾 Certificates
-- **Microsoft Power BI** — August 2025  
-- **Bangkit Academy** — July 2024  
-- **Machine Learning Specialization (Coursera)** — April 2024  
-- **Belajar Analisis Data dengan Python (Dicoding)** — March 2024  
+## 🏁 Conclusion  
 
----
-
-## 📚 Learnings & Takeaways
-
-- Strengthened skills in **data modeling and SQL querying**.  
-- Learned to integrate **multiple datasets** for business analytics.  
-- Enhanced ability to translate **raw data into strategic insights**.  
-- Improved dashboard storytelling and data communication skills.  
-
----
-
-## 🧭 Project Links
-
-🔗 **Dashboard:** [Looker Studio Report](https://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea)  
-🔗 **Repository:** [GitHub Project Link](https://github.com/Rakafebrian/VIX-BigData-Analytics-Kimia-Farma-x-Rakamin)  
-🔗 **LinkedIn:** [https://www.linkedin.com/in/raka-febrian/](https://www.linkedin.com/in/raka-febrian/)  
-
----
-
-## 🏁 Conclusion
-
-This project highlights the importance of **data-driven decision-making** in improving business performance.  
-By leveraging **BigQuery** and **Looker Studio**, data can be transformed into powerful insights that help companies like Kimia Farma monitor growth, identify gaps, and optimize strategies.
+This project highlights how **SQL and BigQuery** can be used to create powerful data-driven insights.  
+By combining structured queries and visualization dashboards, businesses like **Kimia Farma** can monitor performance, optimize product strategy, and enhance customer satisfaction.
