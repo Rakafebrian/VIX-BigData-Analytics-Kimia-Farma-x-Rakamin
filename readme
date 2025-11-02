@@ -1,0 +1,182 @@
+# 🧠 Kimia Farma Business Performance Analysis
+### *Big Data Analytics Project — Rakamin Academy x Kimia Farma*
+
+![Kimia Farma Banner](https://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea/page/tWc6D)
+
+---
+
+## 👨‍💻 Author
+**Raka Febrian Alfarizi**  
+📍 Cikarang Selatan, Kab. Bekasi  
+🎓 Mathematics Graduate, Universitas Brawijaya  
+📊 Data Analyst | Python • SQL • Power BI • BigQuery  
+
+🔗 [LinkedIn](https://www.linkedin.com/in/raka-febrian/) | [GitHub](https://github.com/Rakafebrian) | ✉️ alfarizi140204@gmail.com  
+
+---
+
+## 🧩 Project Overview
+
+This project is part of the **Big Data Analytics – Kimia Farma x Rakamin Academy** program.  
+It aims to analyze the **business performance of PT Kimia Farma (Persero) Tbk** during the period **2020–2023** using **Google BigQuery** and **Looker Studio**.  
+
+Through this analysis, I explored sales trends, branch performance, product contributions, and customer satisfaction to generate actionable business insights.
+
+---
+
+## 🏢 About the Company
+
+**Kimia Farma** is Indonesia’s first pharmaceutical company, established in 1817 under the name *NV Chemicalien Handle Rathkamp & Co*.  
+After Indonesia’s independence, the government merged several pharmaceutical companies into **PNF Bhinneka Kimia Farma** (1958), and later in 1971, it became **PT Kimia Farma (Persero) Tbk**.  
+
+The company continues to play a vital role in the Indonesian healthcare and pharmaceutical industry.
+
+---
+
+## 🎯 Objectives
+
+1. Evaluate Kimia Farma’s **sales performance** from 2020–2023.  
+2. Identify **trends, patterns, and insights** in business operations.  
+3. Build a **BigQuery-based analysis table** by combining multiple datasets.  
+4. Visualize business metrics through a **Looker Studio Performance Dashboard**.  
+
+---
+
+## 🚀 Missions
+
+| Mission | Description |
+|----------|--------------|
+| **Mission 1** | Import dataset into **Google BigQuery** |
+| **Mission 2** | Build an integrated **analysis table** using SQL JOIN |
+| **Mission 3** | Create **Performance Dashboard** in **Looker Studio** |
+
+---
+
+## 🧱 Dataset Preparation
+
+Steps to prepare and load the dataset:  
+1. Create a GCP project: `Rakamin_KF_Analytics`  
+2. Open **BigQuery Console**  
+3. Create a dataset: `kimia_farma`  
+4. Import all CSV data files  
+5. Verify import results and perform validation  
+
+---
+
+## 🧮 SQL Data Modeling
+
+An **analysis table** was created by joining four core tables:  
+- `kf_final_transaction`  
+- `kf_kantor_cabang`  
+- `kf_product`  
+- `kf_inventory`  
+
+The query combines transactional, product, branch, and inventory data — forming a unified dataset ready for analysis.
+
+### Key Transformations:
+- Categorizing product prices into ranges  
+- Calculating gross profit percentage  
+- Computing net sales (after discount)  
+- Deriving net profit (based on profit percentage)  
+
+**Type of Join:** LEFT JOIN — ensuring all transaction data remains intact even if related data is missing.
+
+---
+
+## 🔍 Exploratory Data Analysis (EDA)
+
+EDA was conducted using SQL queries to summarize sales performance per branch.
+
+**Metrics Calculated:**
+- Total transactions  
+- Sales period  
+- Average price, discount, and profit %  
+- Total net sales & total profit  
+- Average rating (transaction & branch)  
+- Unique customers per branch  
+
+---
+
+### 📊 EDA Key Findings
+
+| Analysis Aspect | Findings | Insight / Implication |
+|-----------------|-----------|------------------------|
+| **Total Transactions** | 890K–916K per branch | Balanced customer distribution |
+| **Average Product Price** | Rp 516K | Mid-to-high product category |
+| **Average Discount** | 7.5% | Effective, non-aggressive promo |
+| **Gross Profit %** | 25.6% | Stable and efficient pricing |
+| **Revenue per Branch** | Rp 425–438B | Consistent sales performance |
+| **Total Profit** | Rp 107–110B | Efficient cost control |
+| **Avg. Transaction Rating** | 4.2 / 5 | Positive customer satisfaction |
+| **Avg. Branch Rating** | 4.4 / 5 | Trusted and consistent service |
+| **Unique Customers** | 17K–18.5K | Loyal customer base |
+
+---
+
+## 📈 Dashboard Visualization
+
+An interactive **Performance Analytics Dashboard** was built using **Looker Studio**.  
+
+### 🔗 [View Dashboard Here](https://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea)
+
+**Dashboard Insights:**
+- Revenue peaked in **2022** after pandemic recovery, with slight adjustment in 2023.  
+- **West Java** led in total revenue, followed by **North Sumatra** and **Central Java**.  
+- **Premium products (>Rp500K)** contributed **80% of total profit**.  
+- A **service gap** exists between facility ratings and transaction experience.  
+
+---
+
+## 💡 Summary Insights
+
+| Aspect | Key Findings |
+|---------|---------------|
+| **Business Performance** | Revenue Rp425–438B per branch, profit margin ~25.6% |
+| **Trend Over Time** | Peak in 2022, steady growth in Q3–Q4 each year |
+| **Geographical** | West Java dominates revenue |
+| **Product & Pricing** | Premium items drive profitability |
+| **Customer Experience** | High branch ratings, but lower transaction satisfaction |
+
+---
+
+## 🛠️ Tools & Technologies
+
+| Category | Tools |
+|-----------|-------|
+| **Data Warehouse** | Google BigQuery |
+| **Data Visualization** | Looker Studio |
+| **Query Language** | SQL |
+| **Data Analysis** | Google Cloud Platform |
+| **Documentation** | Markdown, Google Slides, PDF |
+
+---
+
+## 🧾 Certificates
+- **Microsoft Power BI** — August 2025  
+- **Bangkit Academy** — July 2024  
+- **Machine Learning Specialization (Coursera)** — April 2024  
+- **Belajar Analisis Data dengan Python (Dicoding)** — March 2024  
+
+---
+
+## 📚 Learnings & Takeaways
+
+- Strengthened skills in **data modeling and SQL querying**.  
+- Learned to integrate **multiple datasets** for business analytics.  
+- Enhanced ability to translate **raw data into strategic insights**.  
+- Improved dashboard storytelling and data communication skills.  
+
+---
+
+## 🧭 Project Links
+
+🔗 **Dashboard:** [Looker Studio Report](https://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea)  
+🔗 **Repository:** [GitHub Project Link](https://github.com/Rakafebrian/VIX-BigData-Analytics-Kimia-Farma-x-Rakamin)  
+🔗 **LinkedIn:** [https://www.linkedin.com/in/raka-febrian/](https://www.linkedin.com/in/raka-febrian/)  
+
+---
+
+## 🏁 Conclusion
+
+This project highlights the importance of **data-driven decision-making** in improving business performance.  
+By leveraging **BigQuery** and **Looker Studio**, data can be transformed into powerful insights that help companies like Kimia Farma monitor growth, identify gaps, and optimize strategies.
