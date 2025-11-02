@@ -1,7 +1,7 @@
 # 🧠 Kimia Farma Business Performance Analysis
 ### *Big Data Analytics Project — Rakamin Academy x Kimia Farma*
 
-![Kimia Farma Banner](https://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea/page/tWc6D)
+![Kimia Farma Banner](h[ttps://lookerstudio.google.com/reporting/fe4354f5-53b7-4e43-a0f9-0e1bd53215ea/page/tWc6D](https://github.com/Rakafebrian/VIX-BigData-Analytics-Kimia-Farma-x-Rakamin/blob/main/Asset/LOGO-KIMIA-FARMA.png))
 
 ---
 
